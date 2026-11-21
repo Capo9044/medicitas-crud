@@ -5,6 +5,8 @@
 **Docente:** Camilo Morales Vargas
 
 
+## En enlace del video: https://youtu.be/we7q323XvOQ
+
 ## 1. Descripción
 
 MediCitas es una aplicación web sencilla para **registrar, consultar, editar y eliminar citas médicas** de una IPS pequeña. Cada cita guarda el paciente, su documento, la especialidad, el médico, la fecha, la hora, el estado (Programada, Atendida o Cancelada) y observaciones.
