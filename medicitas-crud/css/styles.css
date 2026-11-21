@@ -1,0 +1,208 @@
+/* ==========================================================
+   MediCitas — Hoja de estilos
+   Organización: 1) variables  2) base  3) estructura
+                 4) componentes  5) estados  6) responsive
+   ========================================================== */
+
+/* ---------- 1) Variables: cambiar aquí el tema completo ---------- */
+:root {
+  --color-primario: #0f766e;        /* verde azulado "clínico" */
+  --color-primario-oscuro: #115e59;
+  --color-fondo: #f1f5f4;
+  --color-panel: #ffffff;
+  --color-texto: #1f2a2e;
+  --color-texto-suave: #5b6b70;
+  --color-borde: #d6e0de;
+  --color-peligro: #b42318;
+  --color-programada: #1d4ed8;
+  --color-atendida: #15803d;
+  --color-cancelada: #9a3412;
+  --radio: 10px;
+  --sombra: 0 2px 10px rgba(15, 50, 45, 0.08);
+  --fuente: "Segoe UI", system-ui, -apple-system, Roboto, sans-serif;
+}
+
+/* ---------- 2) Base ---------- */
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: var(--fuente);
+  background: var(--color-fondo);
+  color: var(--color-texto);
+  line-height: 1.45;
+}
+
+h1, h2, h3 { margin: 0; }
+
+/* ---------- 3) Estructura ---------- */
+.encabezado {
+  background: var(--color-primario);
+  color: #fff;
+  padding: 18px 24px;
+}
+.encabezado__marca { display: flex; align-items: center; gap: 14px; max-width: 1200px; margin: 0 auto; }
+.encabezado__logo {
+  width: 44px; height: 44px; border-radius: 12px;
+  background: #fff; color: var(--color-primario);
+  display: grid; place-items: center;
+  font-size: 30px; font-weight: 800;
+}
+.encabezado h1 { font-size: 1.5rem; }
+.encabezado p { margin: 2px 0 0; opacity: 0.85; font-size: 0.9rem; }
+
+.contenedor { max-width: 1200px; margin: 0 auto; padding: 24px; }
+
+.distribucion {
+  display: grid;
+  grid-template-columns: 380px 1fr;   /* formulario | listado */
+  gap: 24px;
+  align-items: start;
+}
+/* Evita que una tabla ancha estire la cuadrícula más allá de la pantalla */
+.distribucion > * { min-width: 0; }
+
+.panel {
+  background: var(--color-panel);
+  border-radius: var(--radio);
+  box-shadow: var(--sombra);
+  padding: 22px;
+}
+.panel h2 { font-size: 1.15rem; margin-bottom: 16px; }
+.panel__cabecera { display: flex; justify-content: space-between; align-items: center; gap: 12px; }
+.panel__cabecera h2 { margin-bottom: 16px; }
+
+.pie { text-align: center; color: var(--color-texto-suave); font-size: 0.85rem; padding: 10px 24px 30px; }
+
+/* ---------- 4) Componentes ---------- */
+
+/* Tarjetas de resumen */
+.resumen { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 24px; }
+.tarjeta-resumen {
+  background: var(--color-panel);
+  border-radius: var(--radio);
+  box-shadow: var(--sombra);
+  padding: 16px 18px;
+  border-left: 5px solid var(--color-primario);
+  display: flex; flex-direction: column;
+}
+.tarjeta-resumen--programada { border-left-color: var(--color-programada); }
+.tarjeta-resumen--atendida   { border-left-color: var(--color-atendida); }
+.tarjeta-resumen--cancelada  { border-left-color: var(--color-cancelada); }
+.tarjeta-resumen__numero { font-size: 1.8rem; font-weight: 700; }
+.tarjeta-resumen__texto { color: var(--color-texto-suave); font-size: 0.9rem; }
+
+/* Formulario */
+.campo { display: flex; flex-direction: column; margin-bottom: 12px; flex: 1; min-width: 0; }
+.fila { display: flex; gap: 12px; }
+label { font-size: 0.85rem; font-weight: 600; margin-bottom: 4px; }
+
+input, select, textarea {
+  font: inherit;
+  padding: 9px 11px;
+  border: 1px solid var(--color-borde);
+  border-radius: 8px;
+  background: #fff;
+  color: var(--color-texto);
+  width: 100%;
+}
+input:focus, select:focus, textarea:focus {
+  outline: none;
+  border-color: var(--color-primario);
+  box-shadow: 0 0 0 3px rgba(15, 118, 110, 0.18);
+}
+textarea { resize: vertical; }
+
+.campo__error { color: var(--color-peligro); font-size: 0.8rem; min-height: 1em; margin-top: 3px; }
+
+.acciones-form { display: flex; gap: 10px; margin-top: 6px; }
+
+/* Botones */
+.boton {
+  font: inherit; font-weight: 600;
+  border: none; border-radius: 8px;
+  padding: 10px 16px;
+  cursor: pointer;
+  transition: background 0.15s, transform 0.05s;
+}
+.boton:active { transform: translateY(1px); }
+.boton--primario { background: var(--color-primario); color: #fff; flex: 1; }
+.boton--primario:hover { background: var(--color-primario-oscuro); }
+.boton--secundario { background: #e6efed; color: var(--color-texto); }
+.boton--secundario:hover { background: #d5e3e0; }
+.boton--peligro { background: #fdecea; color: var(--color-peligro); }
+.boton--peligro:hover { background: #f9d6d2; }
+.modal .boton--peligro { background: var(--color-peligro); color: #fff; }
+.boton--enlace { background: none; color: var(--color-primario); padding: 0 0 16px; text-decoration: underline; }
+.boton--mini { padding: 6px 10px; font-size: 0.82rem; }
+
+/* Filtros */
+.filtros { display: grid; grid-template-columns: 1fr 190px; gap: 10px; margin-bottom: 14px; }
+
+/* Tabla */
+.tabla-contenedor { overflow-x: auto; }
+.tabla { width: 100%; border-collapse: collapse; font-size: 0.92rem; }
+.tabla th {
+  text-align: left; font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.03em;
+  color: var(--color-texto-suave); padding: 10px; border-bottom: 2px solid var(--color-borde);
+}
+.tabla td { padding: 10px; border-bottom: 1px solid var(--color-borde); vertical-align: middle; }
+.tabla td strong { display: block; font-weight: 600; }
+.tabla td small { color: var(--color-texto-suave); }
+.tabla tbody tr:hover { background: #f7fbfa; }
+.tabla__acciones { text-align: right; white-space: nowrap; }
+.tabla__acciones .boton + .boton { margin-left: 6px; }
+
+/* Etiquetas de estado */
+.etiqueta { display: inline-block; padding: 3px 10px; border-radius: 999px; font-size: 0.78rem; font-weight: 600; }
+.etiqueta--programada { background: #e0e9ff; color: var(--color-programada); }
+.etiqueta--atendida   { background: #dcf3e3; color: var(--color-atendida); }
+.etiqueta--cancelada  { background: #fde8dc; color: var(--color-cancelada); }
+
+.vacio { text-align: center; color: var(--color-texto-suave); padding: 26px 10px; margin: 0; }
+
+/* Modal de confirmación */
+.modal {
+  position: fixed; inset: 0;
+  background: rgba(15, 30, 30, 0.45);
+  display: grid; place-items: center;
+  padding: 20px; z-index: 10;
+}
+.modal__caja { background: #fff; border-radius: var(--radio); padding: 24px; max-width: 420px; width: 100%; box-shadow: 0 10px 40px rgba(0,0,0,0.2); }
+.modal__caja p { color: var(--color-texto-suave); }
+.modal__acciones { display: flex; justify-content: flex-end; gap: 10px; margin-top: 18px; }
+
+/* Notificaciones (toasts) */
+.notificaciones { position: fixed; bottom: 20px; right: 20px; display: flex; flex-direction: column; gap: 8px; z-index: 20; }
+.notificacion {
+  padding: 12px 16px; border-radius: 8px; color: #fff; font-weight: 600;
+  box-shadow: var(--sombra); animation: aparecer 0.25s ease-out;
+}
+.notificacion--exito { background: var(--color-atendida); }
+.notificacion--error { background: var(--color-peligro); }
+.notificacion--info  { background: var(--color-primario); }
+@keyframes aparecer { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+
+/* ---------- 5) Estados ---------- */
+.oculto { display: none !important; }
+.invalido { border-color: var(--color-peligro) !important; }
+.form--edicion { outline: 2px dashed #f59e0b; outline-offset: 8px; border-radius: 4px; }
+
+/* ---------- 6) Responsive (tablets y celulares) ---------- */
+@media (max-width: 900px) {
+  .distribucion { grid-template-columns: 1fr; }
+  .resumen { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 640px) {
+  /* En celular la tabla se convierte en "tarjetas": una cita por bloque */
+  .tabla thead { display: none; }
+  .tabla, .tabla tbody, .tabla tr, .tabla td { display: block; width: 100%; }
+  .tabla tr { border: 1px solid var(--color-borde); border-radius: 8px; margin-bottom: 12px; padding: 6px 4px; }
+  .tabla td { border-bottom: none; padding: 6px 10px; }
+  .tabla__acciones { text-align: left; }
+}
+@media (max-width: 520px) {
+  .contenedor { padding: 14px; }
+  .fila, .filtros { grid-template-columns: 1fr; flex-direction: column; gap: 0; }
+  .filtros { gap: 10px; }
+}

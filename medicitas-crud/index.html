@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="MediCitas: aplicación CRUD para gestionar citas médicas, desarrollada con apoyo de IA.">
+  <title>MediCitas · Gestión de citas médicas</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+  <!-- ===================== ENCABEZADO ===================== -->
+  <header class="encabezado">
+    <div class="encabezado__marca">
+      <span class="encabezado__logo" aria-hidden="true">+</span>
+      <div>
+        <h1>MediCitas</h1>
+        <p>Gestión de citas médicas</p>
+      </div>
+    </div>
+  </header>
+
+  <main class="contenedor">
+
+    <!-- ===================== RESUMEN (contadores) ===================== -->
+    <section class="resumen" aria-label="Resumen de citas">
+      <article class="tarjeta-resumen">
+        <span class="tarjeta-resumen__numero" id="totalCitas">0</span>
+        <span class="tarjeta-resumen__texto">Total de citas</span>
+      </article>
+      <article class="tarjeta-resumen tarjeta-resumen--programada">
+        <span class="tarjeta-resumen__numero" id="totalProgramadas">0</span>
+        <span class="tarjeta-resumen__texto">Programadas</span>
+      </article>
+      <article class="tarjeta-resumen tarjeta-resumen--atendida">
+        <span class="tarjeta-resumen__numero" id="totalAtendidas">0</span>
+        <span class="tarjeta-resumen__texto">Atendidas</span>
+      </article>
+      <article class="tarjeta-resumen tarjeta-resumen--cancelada">
+        <span class="tarjeta-resumen__numero" id="totalCanceladas">0</span>
+        <span class="tarjeta-resumen__texto">Canceladas</span>
+      </article>
+    </section>
+
+    <div class="distribucion">
+
+      <!-- ===================== FORMULARIO (CREATE / UPDATE) ===================== -->
+      <section class="panel" aria-labelledby="tituloFormulario">
+        <h2 id="tituloFormulario">Nueva cita</h2>
+
+        <form id="formCita" novalidate>
+          <!-- Campo oculto: si tiene un id, el formulario está en modo edición -->
+          <input type="hidden" id="citaId">
+
+          <div class="campo">
+            <label for="paciente">Nombre del paciente *</label>
+            <input type="text" id="paciente" maxlength="60" placeholder="Ej: María Fernanda López" autocomplete="off">
+            <small class="campo__error" data-error-para="paciente"></small>
+          </div>
+
+          <div class="campo">
+            <label for="documento">Documento de identidad *</label>
+            <input type="text" id="documento" inputmode="numeric" maxlength="10" placeholder="Solo números (6 a 10 dígitos)" autocomplete="off">
+            <small class="campo__error" data-error-para="documento"></small>
+          </div>
+
+          <div class="fila">
+            <div class="campo">
+              <label for="especialidad">Especialidad *</label>
+              <select id="especialidad">
+                <option value="">Seleccione…</option>
+                <option>Medicina general</option>
+                <option>Pediatría</option>
+                <option>Ginecología</option>
+                <option>Odontología</option>
+                <option>Psicología</option>
+                <option>Cardiología</option>
+              </select>
+              <small class="campo__error" data-error-para="especialidad"></small>
+            </div>
+
+            <div class="campo">
+              <label for="medico">Médico *</label>
+              <input type="text" id="medico" maxlength="60" placeholder="Ej: Dr. Andrés Ruiz" autocomplete="off">
+              <small class="campo__error" data-error-para="medico"></small>
+            </div>
+          </div>
+
+          <div class="fila">
+            <div class="campo">
+              <label for="fecha">Fecha *</label>
+              <input type="date" id="fecha">
+              <small class="campo__error" data-error-para="fecha"></small>
+            </div>
+
+            <div class="campo">
+              <label for="hora">Hora *</label>
+              <input type="time" id="hora" min="06:00" max="20:00" step="900">
+              <small class="campo__error" data-error-para="hora"></small>
+            </div>
+          </div>
+
+          <div class="campo">
+            <label for="estado">Estado</label>
+            <select id="estado">
+              <option>Programada</option>
+              <option>Atendida</option>
+              <option>Cancelada</option>
+            </select>
+          </div>
+
+          <div class="campo">
+            <label for="observaciones">Observaciones</label>
+            <textarea id="observaciones" rows="3" maxlength="200" placeholder="Motivo de consulta u otra nota (opcional)"></textarea>
+          </div>
+
+          <div class="acciones-form">
+            <button type="submit" class="boton boton--primario" id="btnGuardar">Guardar cita</button>
+            <button type="button" class="boton boton--secundario oculto" id="btnCancelarEdicion">Cancelar edición</button>
+          </div>
+        </form>
+      </section>
+
+      <!-- ===================== LISTADO (READ) ===================== -->
+      <section class="panel" aria-labelledby="tituloListado">
+        <div class="panel__cabecera">
+          <h2 id="tituloListado">Citas registradas</h2>
+          <button type="button" class="boton boton--enlace" id="btnDatosEjemplo">Cargar datos de ejemplo</button>
+        </div>
+
+        <!-- Filtros de búsqueda -->
+        <div class="filtros">
+          <input type="search" id="buscador" placeholder="Buscar por paciente, documento o médico…" aria-label="Buscar citas">
+          <select id="filtroEstado" aria-label="Filtrar por estado">
+            <option value="">Todos los estados</option>
+            <option>Programada</option>
+            <option>Atendida</option>
+            <option>Cancelada</option>
+          </select>
+        </div>
+
+        <div class="tabla-contenedor">
+          <table class="tabla">
+            <thead>
+              <tr>
+                <th>Paciente</th>
+                <th>Especialidad / Médico</th>
+                <th>Fecha y hora</th>
+                <th>Estado</th>
+                <th class="tabla__acciones">Acciones</th>
+              </tr>
+            </thead>
+            <tbody id="cuerpoTabla">
+              <!-- Las filas se generan desde js/ui.js -->
+            </tbody>
+          </table>
+        </div>
+
+        <p class="vacio oculto" id="mensajeVacio">No hay citas para mostrar. Registra la primera con el formulario.</p>
+      </section>
+    </div>
+  </main>
+
+  <footer class="pie">
+    Juan Sebastian Briñez Contreras · Seminario en Gestión de Software Ágil asistido por IA · FET
+  </footer>
+
+  <!-- ===================== VENTANA DE CONFIRMACIÓN (DELETE) ===================== -->
+  <div class="modal oculto" id="modalEliminar" role="dialog" aria-modal="true" aria-labelledby="tituloModal">
+    <div class="modal__caja">
+      <h3 id="tituloModal">¿Eliminar esta cita?</h3>
+      <p id="textoModal">Esta acción no se puede deshacer.</p>
+      <div class="modal__acciones">
+        <button type="button" class="boton boton--secundario" id="btnModalCancelar">Cancelar</button>
+        <button type="button" class="boton boton--peligro" id="btnModalConfirmar">Sí, eliminar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Contenedor de notificaciones (toasts) -->
+  <div class="notificaciones" id="notificaciones" aria-live="polite"></div>
+
+  <!-- El orden importa: cada archivo usa lo que definen los anteriores -->
+  <script src="js/storage.js"></script>
+  <script src="js/validaciones.js"></script>
+  <script src="js/ui.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
